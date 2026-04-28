@@ -1,0 +1,18 @@
+1000   contraseña: admin123  --- admin
+1001   contraseña: 123456Omar  --- cajero 
+1002   contraseña: LMart!852   --- cajero 
+1003   contraseña: CJim_92x     --- cajero 
+1004   contraseña: P3dro$2025   --- cajero 
+1005   contraseña: SofiD@753 	---cajero
+1006   contraseña: MLopez%2024   --- cajero 
+1007   contraseña: JaviR_#77    ---cajero 
+1008   contraseña: LMart!852    ---cajero 
+1009   contraseña: AndC@0812    ---cajero 
+
+
+
+
+
+
+
+ 

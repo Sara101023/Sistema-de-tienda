@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Punto de Venta - Cajero</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="css/logo.png" alt="Logo Tienda">
+                <h2>Cajero</h2>
+            </div>
+            <nav class="menu">
+                <ul>
+                    <li><a href="ventas.html"><i class="icon fas fa-shopping-cart"></i>Ventas</a></li>
+                    <li><a href="clientes.html"><i class="icon fas fa-user-friends"></i>Clientes</a></li>
+                    <li><a href="devoluciones.html"><i class="icon fas fa-undo-alt"></i>Devoluciones</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <img src="css/usuario.webp" alt="Cajero">
+                <span>Cajero</span>
+                <button id="logout-btn">Cerrar sesión</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h1>Bienvenido Cajero</h1>
+            </header>
+            <section>
+                <p>Selecciona una acción desde el menú: ventas, clientes o devoluciones.</p>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        
+    const rol = localStorage.getItem('rol');
+console.log('Rol actual:', rol);
+
+if (rol !== 'administrador' && window.location.pathname.includes('index.html')) {
+    window.location.href = 'login.html';
+} else if (rol !== 'cajero' && window.location.pathname.includes('cajero.html')) {
+    window.location.href = 'login.html';
+}
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

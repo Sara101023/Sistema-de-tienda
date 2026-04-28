@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punto de Venta - Promociones</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="css/logo.png" alt="Logo Tienda">
+                <h2>Mi Tienda</h2>
+            </div>
+            <nav class="menu">
+                <ul>
+                    <li><a href="index.html"><i class="icon fas fa-chart-line"></i>General</a></li>
+                    <li><a href="inventario.html"><i class="icon fas fa-boxes"></i>Inventario</a></li>
+                    <li><a href="reportes.html"><i class="icon fas fa-chart-pie"></i>Reportes</a></li>
+                    <li class="active"><a href="promociones.html"><i class="icon fas fa-tag"></i>Promociones</a></li>
+                    <li><a href="usuarios.html"><i class="icon fas fa-users"></i>Usuarios</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <img src="css/usuario.webp" alt="Usuario">
+                <span>Administrador</span>
+                <button id="logout-btn">Cerrar sesión</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h1>Administrar Promociones</h1>
+                <div>
+                    <button id="add-promo-btn" class="btn-primary">
+                        <i class="fas fa-plus"></i> Nueva Promoción
+                    </button>
+
+                </div>
+            </header>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="status-filter">Estado:</label>
+                    <select id="status-filter" class="form-control">
+                        <option value="all">Todas</option>
+                        <option value="active">Activas</option>
+                        <option value="inactive">Inactivas</option>
+                        <option value="expired">Expiradas</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="type-filter">Tipo:</label>
+                    <select id="type-filter" class="form-control">
+                        <option value="all">Todos</option>
+                        <option value="percentage">Descuento %</option>
+                        <option value="fixed">Descuento fijo</option>
+                        <option value="buyxgety">Compra X lleva Y</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+
+                    <button class="btn-search">
+                        <i class="fas fa-search"></i>
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Descuento</th>
+                            <th>Productos</th>
+                            <th>Válida hasta</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody> </tbody>
+                </table>
+            </div>
+            <!-- Modal para agregar/editar promoción -->
+            <div id="promo-modal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="modal-title">Nueva Promoción</h3>
+                        <span class="close-modal">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <form id="promo-form">
+                            <div class="form-group">
+                                <label for="promo-name">Nombre de la promoción*</label>
+                                <input type="text" id="promo-name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="promo-type">Tipo de promoción*</label>
+                                <select id="promo-type" required>
+                                    <option value="">Seleccione...</option>
+                                    <option value="buyxgety">Compra X lleva Y</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" id="discount-amount-group">
+                                <label for="discount-amount">Valor del descuento*</label>
+                                <input type="number" id="discount-amount" min="0">
+                            </div>
+
+                            <div class="form-group" id="buyxgety-group" style="display: none;">
+                                <label for="buy-quantity">Compra*</label>
+                                <input type="number" id="buy-quantity" min="1" placeholder="Cantidad X">
+                                <label for="get-quantity">Lleva*</label>
+                                <input type="number" id="get-quantity" min="1" placeholder="Cantidad Y">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="promo-products">Aplicar a*</label>
+                                <select id="promo-products" required>
+                                    <option value="all">Todos los productos</option>
+                                    <option value="category">Categoría específica</option>
+                                    <option value="products">Productos seleccionados</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" id="products-group" style="display: none;">
+                                <label for="product-search">Buscar productos*</label>
+                                <input type="text" id="product-search" placeholder="Escribe el nombre del producto">
+                                <div id="product-suggestions" class="suggestions-list"></div>
+
+                                <!-- Lista de productos seleccionados -->
+                                <div id="selected-products"></div>
+                            </div>
+
+
+                            <div class="form-group" id="category-group" style="display: none;">
+                                <label for="promo-category">Categoría</label>
+                                <select id="promo-category">
+                                    <option value="Dulces">Dulcería</option>
+                                    <option value="Bebidas">Bebidas</option>
+                                    <option value="Panadería">Panadería</option>
+                                    <option value="Abarrotes">Abarrotes</option>
+                                    <option value="Cereales">Cereales</option>
+                                    <option value="Botanas">Botanas</option>
+                                    <option value="Limpieza">Limpieza</option>
+                                    <option value="Lacteos">Lacteos</option>                              
+                                    <option value="Enlatados">Enlatados</option>
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="promo-start">Fecha inicio*</label>
+                                <input type="date" id="promo-start" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="promo-end">Fecha fin*</label>
+                                <input type="date" id="promo-end" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="promo-description">Descripción</label>
+                                <textarea id="promo-description" rows="3"></textarea>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn-cancel">Cancelar</button>
+                                <button type="submit" class="btn-save">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/promociones.js"></script>
+</body>
+
+</html>

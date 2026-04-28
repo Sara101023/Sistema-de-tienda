@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inicio de Sesión</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #34495e;
+      --accent-color: #00ff85;
+      --danger-color: #e74c3c;
+    }
+
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f5f6fa;
+    }
+
+    .login-box {
+      background-color: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      position: relative;
+    }
+
+    .login-box h2 {
+      color: var(--primary-color);
+      margin-bottom: 30px;
+    }
+
+    .login-box img {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--secondary-color);
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--accent-color);
+      outline: none;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--accent-color);
+      color: rgb(0, 0, 0);
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+    }
+
+    .login-btn:hover {
+      background-color: #00cc70;
+    }
+
+    .guest-btn {
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+      padding: 10px 20px;
+      background-color: #00ff85;
+      color: rgb(0, 0, 0);
+      border: none;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      text-decoration: none;
+    }
+
+    .guest-btn:hover {
+      background-color: #00cc70;
+    }
+
+    .role-selector {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .role-selector h2 {
+      margin-bottom: 15px;
+      color: var(--secondary-color);
+    }
+
+    .role-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .role-btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .admin-btn {
+      background-color: #ff1b1b;
+      color: white;
+    }
+
+    .cashier-btn {
+      background-color: #00ff85 ;
+      color: white;
+    }
+
+    .selected {
+      box-shadow: 0 0 0 2px var(--accent-color);
+    }
+
+    .error-message {
+      color: var(--danger-color);
+      margin-top: 15px;
+      font-size: 0.9rem;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-container">
+    <div class="login-box">
+      <img src="css/logo.png" alt="Logo Tienda" />
+      <h2>Iniciar Sesión</h2>
+
+      <!-- Selector de roles -->
+      <div class="role-selector">
+        <h2>Selecciona tu rol</h2>
+        <div class="role-buttons">
+          <button class="role-btn admin-btn" onclick="selectRole('admin')">
+            <i class="fas fa-user-shield"></i>
+            Administrador
+          </button>
+          <button class="role-btn cashier-btn" onclick="selectRole('cashier')">
+            <i class="fas fa-cash-register"></i>
+            Cajero
+          </button>
+        </div>
+      </div>
+
+      <!-- Formulario de login -->
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="numero_trabajador">Usuario</label>
+          <input type="text" id="numero_trabajador" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" required />
+        </div>
+        <button type="submit" class="login-btn">Ingresar</button>
+        <div id="errorMessage" class="error-message">Usuario o contraseña incorrectos</div>
+      </form>
+
+      
+    </div>
+    <button class="guest-btn" id="guestBtn">Comprar ahora</button>
+  </div>
+
+  <!-- Script principal -->
+  <script>
+    let rolSeleccionado = null;
+
+    function selectRole(rol) {
+      rolSeleccionado = rol;
+      document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('selected'));
+      if (rol === 'admin') {
+        document.querySelector('.admin-btn').classList.add('selected');
+      } else if (rol === 'cashier') {
+        document.querySelector('.cashier-btn').classList.add('selected');
+      }
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const numero_trabajador = document.getElementById('numero_trabajador').value.trim();
+      const contrasena = document.getElementById('password').value.trim();
+      const errorMsg = document.getElementById('errorMessage');
+
+      if (!rolSeleccionado) {
+        errorMsg.textContent = 'Por favor selecciona un rol antes de ingresar.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:4000/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ numero_trabajador, contrasena })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Error de autenticación');
+        }
+
+        const rolReal = data.user.rol;
+
+        if (
+          (rolSeleccionado === 'admin' && rolReal !== 'administrador') ||
+          (rolSeleccionado === 'cashier' && rolReal !== 'cajero')
+        ) {
+          throw new Error(`No tienes permisos como ${rolSeleccionado === 'admin' ? 'Administrador' : 'Cajero'}.`);
+        }
+
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('currentUser', JSON.stringify(data.user));
+        localStorage.setItem('rol', rolReal);
+
+        if (rolReal === 'administrador') {
+          window.location.href = 'index.html';
+        } else if (rolReal === 'cajero') {
+          window.location.href = 'ventas.html';
+        }
+
+      } catch (error) {
+        console.error('Error en login:', error);
+        errorMsg.textContent = error.message;
+        errorMsg.style.display = 'block';
+      }
+    });
+
+    document.getElementById('guestBtn').addEventListener('click', function () {
+      window.location.href = 'ventas.html?guest=true';
+    });
+  </script>
+</body>
+</html>
